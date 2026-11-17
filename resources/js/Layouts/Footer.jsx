@@ -13,7 +13,7 @@ export default function Footer() {
                             <img
                                 src="/images/logo-petir.png"
                                 alt="Logo SIMPEL"
-                                className="w-25 h-10 object-contain"
+                                className="w-24 h-10 object-contain"
                             />
                             <span className="text-2xl font-black tracking-tighter text-white">
                                 SIMPEL<span className="text-yellow-400">.</span>
@@ -42,20 +42,20 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link
+                                <a
                                     href="#fasilitas"
                                     className="hover:text-yellow-400 transition-colors"
                                 >
                                     Daftar Fasilitas
-                                </Link>
+                                </a>
                             </li>
                             <li>
-                                <Link
+                                <a
                                     href="#cara-kerja"
                                     className="hover:text-yellow-400 transition-colors"
                                 >
                                     Prosedur Pinjam
-                                </Link>
+                                </a>
                             </li>
                         </ul>
                     </div>

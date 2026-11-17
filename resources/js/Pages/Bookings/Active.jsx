@@ -43,14 +43,14 @@ export default function ActiveBookings({ activeBookings }) {
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="h-10 w-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-100">
-                                                            {booking.facility.category === 'ruangan' ? <Building className="w-5 h-5" /> : <Box className="w-5 h-5" />}
+                                                            {booking.facility?.category === 'ruangan' ? <Building className="w-5 h-5" /> : <Box className="w-5 h-5" />}
                                                         </div>
-                                                        <div className="font-[800] text-slate-900">{booking.facility.name}</div>
+                                                        <div className="font-[800] text-slate-900">{booking.facility?.name ?? 'Fasilitas Dihapus'}</div>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="font-bold text-slate-800 flex items-center gap-1.5"><UserCircle className="w-4 h-4 text-slate-400" /> {booking.user.name}</div>
-                                                    <div className="text-xs text-slate-500 font-medium mt-1">NPM: {booking.user.npm}</div>
+                                                    <div className="font-bold text-slate-800 flex items-center gap-1.5"><UserCircle className="w-4 h-4 text-slate-400" /> {booking.user?.name ?? '-'}</div>
+                                                    <div className="text-xs text-slate-500 font-medium mt-1">NPM: {booking.user?.npm ?? '-'}</div>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex flex-col gap-1.5 text-xs">

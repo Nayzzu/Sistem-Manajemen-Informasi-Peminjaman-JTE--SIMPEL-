@@ -25,6 +25,6 @@ class Booking extends Model
 
     public function facility()
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class)->withTrashed();
     }
 }

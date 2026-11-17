@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Link } from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar({ scrolled, auth, isDashboard = false }) {
+    const [mobileOpen, setMobileOpen] = useState(false);
+
     return (
         <nav
             className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-                scrolled || isDashboard
+                scrolled || isDashboard || mobileOpen
                     ? "bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"
                     : "bg-transparent"
             }`}
@@ -27,6 +31,16 @@ export default function Navbar({ scrolled, auth, isDashboard = false }) {
                         </span>
                     </div>
                 </Link>
+
+                {/* TOMBOL MENU MOBILE */}
+                <button
+                    type="button"
+                    onClick={() => setMobileOpen((prev) => !prev)}
+                    className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors"
+                    aria-label="Toggle Menu"
+                >
+                    {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
 
                 {/* MENU NAVIGASI TENGAH */}
                 <div className="hidden md:flex items-center gap-8">
@@ -212,6 +226,120 @@ export default function Navbar({ scrolled, auth, isDashboard = false }) {
                     </div>
                 </div>
             </div>
+
+            {/* MENU MOBILE DROPDOWN */}
+            {mobileOpen && (
+                <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3 shadow-lg">
+                    {isDashboard ? (
+                        <>
+                            <Link
+                                href={route("dashboard")}
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Dashboard
+                            </Link>
+                            <Link
+                                href={route("facilities.index")}
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Daftar Fasilitas
+                            </Link>
+                            <Link
+                                href={route("bookings.activeList")}
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Peminjaman Aktif
+                            </Link>
+                            <Link
+                                href={route("bookings.history")}
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Riwayat Pinjam
+                            </Link>
+                            {auth.user?.role === "admin" && (
+                                <>
+                                    <Link
+                                        href={route("admin.approvals")}
+                                        onClick={() => setMobileOpen(false)}
+                                        className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                                    >
+                                        Verifikasi Admin
+                                    </Link>
+                                    <Link
+                                        href={route("admin.users")}
+                                        onClick={() => setMobileOpen(false)}
+                                        className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                                    >
+                                        Pengguna
+                                    </Link>
+                                </>
+                            )}
+                            <div className="pt-3 border-t border-slate-100 space-y-2">
+                                <Link
+                                    href={route("profile.edit")}
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                                >
+                                    Edit Profil
+                                </Link>
+                                <Link
+                                    href={route("logout")}
+                                    method="post"
+                                    as="button"
+                                    className="block w-full text-left py-2 text-sm font-bold text-red-600"
+                                >
+                                    Keluar Aplikasi
+                                </Link>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <a
+                                href="#beranda"
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Beranda
+                            </a>
+                            <a
+                                href="#fasilitas"
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Fasilitas
+                            </a>
+                            <a
+                                href="#cara-kerja"
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                            >
+                                Prosedur
+                            </a>
+                            <div className="pt-3 border-t border-slate-100">
+                                {auth.user ? (
+                                    <Link
+                                        href={route("dashboard")}
+                                        className="block w-full text-center px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white text-sm font-[800] rounded-xl"
+                                    >
+                                        Masuk Dashboard
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        href={route("login")}
+                                        className="block w-full text-center px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white text-sm font-[800] rounded-xl"
+                                    >
+                                        Masuk Sistem
+                                    </Link>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+            )}
         </nav>
     );
 }

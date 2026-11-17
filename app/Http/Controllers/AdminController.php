@@ -48,10 +48,12 @@ class AdminController extends Controller
 
         $booking->update($updateData);
 
-        try {
-            \Illuminate\Support\Facades\Mail::to($booking->user->email)->send(new \App\Mail\BookingStatusUpdated($booking));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Mail failed: ' . $e->getMessage());
+        if ($booking->user?->email) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($booking->user->email)->send(new \App\Mail\BookingStatusUpdated($booking));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Mail failed: ' . $e->getMessage());
+            }
         }
 
         return back()->with('success', 'Status peminjaman berhasil diperbarui.');
@@ -79,8 +81,8 @@ class AdminController extends Controller
             foreach ($bookings as $booking) {
                 fputcsv($file, [
                     $booking->id,
-                    $booking->user->name,
-                    $booking->facility->name,
+                    $booking->user?->name ?? '-',
+                    $booking->facility?->name ?? '-',
                     $booking->start_time,
                     $booking->end_time,
                     $booking->reason,

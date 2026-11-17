@@ -34,7 +34,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
             {/* CONTENT AREA */}
             <main
-                className={`${!header ? "pt-28" : "pt-6"} pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500`}
+                className={`${!header ? "pt-28" : "pt-6"} pb-12 transition-opacity duration-300`}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {children}

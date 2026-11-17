@@ -17,4 +17,12 @@ class Facility extends Model
         'needs_kajur_approval',
         'is_available',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'needs_kajur_approval' => 'boolean',
+            'is_available' => 'boolean',
+        ];
+    }
 }

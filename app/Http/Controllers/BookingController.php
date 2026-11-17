@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
+use App\Models\Facility;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BookingController extends Controller
 {
@@ -12,36 +16,42 @@ class BookingController extends Controller
             return back()->withErrors(['start_time' => 'Akun Anda dinonaktifkan. Silakan hubungi admin.'])->withInput();
         }
 
-        $facility = \App\Models\Facility::findOrFail($request->facility_id);
-
         $request->validate([
             'facility_id' => 'required|exists:facilities,id',
-            'start_time' => 'required|date|after_or_equal:today',
+            'start_time' => 'required|date|after_or_equal:now',
             'end_time' => 'required|date|after:start_time',
             'reason' => 'required|string|max:500',
+        ], [
+            'start_time.after_or_equal' => 'Waktu mulai tidak boleh di masa lalu.',
+            'end_time.after' => 'Waktu selesai harus setelah waktu mulai.',
+        ]);
+
+        $facility = Facility::findOrFail($request->facility_id);
+
+        if (!$facility->is_available) {
+            return back()->withErrors(['start_time' => 'Fasilitas ini sedang tidak tersedia untuk dipinjam.'])->withInput();
+        }
+
+        $request->validate([
             'attachment' => [
                 $facility->needs_kajur_approval ? 'required' : 'nullable',
                 'file',
                 'mimes:pdf,jpg,jpeg,png',
-                'max:2048'
+                'max:2048',
             ],
         ], [
             'attachment.required' => 'Surat permohonan ke Kepala Jurusan wajib dilampirkan untuk fasilitas ini.',
-            'start_time.after_or_equal' => 'Waktu mulai tidak boleh di masa lalu.',
-            'end_time.after' => 'Waktu selesai harus setelah waktu mulai.'
         ]);
 
+        $startTime = Carbon::parse($request->start_time);
+        $endTime = Carbon::parse($request->end_time);
+
         // Cek konflik peminjaman (mencegah double booking)
-        $conflict = \App\Models\Booking::where('facility_id', $request->facility_id)
+        $conflict = Booking::where('facility_id', $facility->id)
             ->whereIn('status', ['approved', 'pending'])
-            ->where(function ($query) use ($request) {
-                $query->whereBetween('start_time', [$request->start_time, $request->end_time])
-                      ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-                      ->orWhere(function ($q) use ($request) {
-                          $q->where('start_time', '<=', $request->start_time)
-                            ->where('end_time', '>=', $request->end_time);
-                      });
-            })->exists();
+            ->where('start_time', '<', $endTime)
+            ->where('end_time', '>', $startTime)
+            ->exists();
 
         if ($conflict) {
             return back()->withErrors(['start_time' => 'Fasilitas sudah dipesan atau sedang diajukan pada rentang waktu tersebut.'])->withInput();
@@ -52,11 +62,11 @@ class BookingController extends Controller
             $attachmentPath = $request->file('attachment')->store('attachments', 'public');
         }
 
-        \App\Models\Booking::create([
+        Booking::create([
             'user_id' => auth()->id(),
-            'facility_id' => $request->facility_id,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
+            'facility_id' => $facility->id,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
             'reason' => $request->reason,
             'status' => 'pending', // Default status
             'attachment' => $attachmentPath,
@@ -68,8 +78,8 @@ class BookingController extends Controller
     public function history()
     {
         $user = auth()->user();
-        
-        $query = \App\Models\Booking::with('facility')->latest();
+
+        $query = Booking::with('facility')->latest();
 
         // Jika bukan admin, hanya bisa melihat booking miliknya
         if ($user->role !== 'admin') {
@@ -78,21 +88,21 @@ class BookingController extends Controller
 
         $bookings = $query->get();
 
-        return \Inertia\Inertia::render('Bookings/History', [
-            'bookings' => $bookings
+        return Inertia::render('Bookings/History', [
+            'bookings' => $bookings,
         ]);
     }
 
     public function activeList()
     {
-        $activeBookings = \App\Models\Booking::with(['user', 'facility'])
+        $activeBookings = Booking::with(['user', 'facility'])
             ->where('status', 'approved')
             ->where('end_time', '>=', now())
             ->orderBy('start_time', 'asc')
             ->get();
 
-        return \Inertia\Inertia::render('Bookings/Active', [
-            'activeBookings' => $activeBookings
+        return Inertia::render('Bookings/Active', [
+            'activeBookings' => $activeBookings,
         ]);
     }
 }

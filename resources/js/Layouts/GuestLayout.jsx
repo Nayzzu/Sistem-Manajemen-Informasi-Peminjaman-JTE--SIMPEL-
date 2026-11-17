@@ -9,7 +9,7 @@ export default function GuestLayout({ children }) {
                     <img
                         src="/images/logo-petir.png"
                         alt="Logo SIMPEL"
-                        className="w-25 h-20 object-contain"
+                        className="w-24 h-20 object-contain"
                     />
                     <span className="text-2xl font-black tracking-tighter text-blue-900">
                         SIMPEL<span className="text-yellow-500">.</span>

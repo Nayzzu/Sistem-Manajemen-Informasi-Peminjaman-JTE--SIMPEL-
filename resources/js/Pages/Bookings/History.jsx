@@ -56,7 +56,7 @@ export default function History({ bookings }) {
                                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                             <div className="flex-1">
                                                 <h3 className="text-xl font-[800] text-slate-900 mb-4">
-                                                    {booking.facility.name}
+                                                    {booking.facility?.name ?? 'Fasilitas Dihapus'}
                                                 </h3>
                                                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm text-slate-600 font-medium">
                                                     <div className="space-y-2">

@@ -110,13 +110,13 @@ export default function Approvals({ pendingBookings, activeBookings }) {
                                                 <div className="flex-1 space-y-5">
                                                     <div className="flex items-center gap-4">
                                                         <div className="h-12 w-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
-                                                            {booking.facility.category === 'ruangan' ? <Building className="w-6 h-6" /> : <Box className="w-6 h-6" />}
+                                                            {booking.facility?.category === 'ruangan' ? <Building className="w-6 h-6" /> : <Box className="w-6 h-6" />}
                                                         </div>
                                                         <div>
-                                                            <h3 className="text-xl font-[800] text-slate-900">{booking.facility.name}</h3>
+                                                            <h3 className="text-xl font-[800] text-slate-900">{booking.facility?.name ?? 'Fasilitas Dihapus'}</h3>
                                                             <div className="flex items-center gap-2 mt-1">
                                                                 <UserCircle className="w-4 h-4 text-slate-400" />
-                                                                <p className="text-sm text-slate-600 font-medium"><span className="font-bold text-slate-800">{booking.user.name}</span> ({booking.user.npm})</p>
+                                                                <p className="text-sm text-slate-600 font-medium"><span className="font-bold text-slate-800">{booking.user?.name ?? '-'}</span> ({booking.user?.npm ?? '-'})</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -188,11 +188,11 @@ export default function Approvals({ pendingBookings, activeBookings }) {
                                             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                                                 <div className="flex-1 flex gap-5 w-full">
                                                     <div className="h-12 w-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 flex-shrink-0">
-                                                        {booking.facility.category === 'ruangan' ? <Building className="w-6 h-6" /> : <Box className="w-6 h-6" />}
+                                                        {booking.facility?.category === 'ruangan' ? <Building className="w-6 h-6" /> : <Box className="w-6 h-6" />}
                                                     </div>
                                                     <div>
                                                         <div className="flex flex-wrap items-center gap-3 mb-2">
-                                                            <h3 className="text-xl font-[800] text-slate-900">{booking.facility.name}</h3>
+                                                            <h3 className="text-xl font-[800] text-slate-900">{booking.facility?.name ?? 'Fasilitas Dihapus'}</h3>
                                                             <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase rounded-full tracking-widest flex items-center gap-1 border border-emerald-200">
                                                                 <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                                                                 Sedang Dipinjam
@@ -201,7 +201,7 @@ export default function Approvals({ pendingBookings, activeBookings }) {
                                                         <div className="flex flex-wrap gap-x-6 gap-y-2 mt-2">
                                                             <p className="text-sm text-slate-600 font-medium flex items-center gap-1.5">
                                                                 <UserCircle className="w-4 h-4 text-slate-400" />
-                                                                <span className="font-bold text-slate-800">{booking.user.name}</span>
+                                                                <span className="font-bold text-slate-800">{booking.user?.name ?? '-'}</span>
                                                             </p>
                                                             <p className="text-sm text-slate-600 font-medium flex items-center gap-1.5">
                                                                 <Clock className="w-4 h-4 text-slate-400" />

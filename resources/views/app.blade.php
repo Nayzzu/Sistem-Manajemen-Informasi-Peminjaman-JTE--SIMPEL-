@@ -7,8 +7,7 @@
     <link rel="icon" href="/images/logo-petir.png" type="image/png">
     @routes 
     @viteReactRefresh
-    {{-- Pastikan resources/css/app.css ikut dipanggil --}}
-    @vite(['resources/js/app.jsx', 'resources/css/app.css']) 
+    @vite(['resources/js/app.jsx'])
     @inertiaHead
 </head>
     <body class="font-sans antialiased">

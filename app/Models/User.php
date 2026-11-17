@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-#[Fillable(['name', 'email', 'password', 'npm', 'program_studi', 'nomor_telepon', 'role', 'status_aktif'])] // Tambahkan atribut baru di sini [cite: 56, 70]
+#[Fillable(['name', 'email', 'password', 'npm', 'program_studi', 'nomor_telepon', 'foto', 'role', 'status_aktif'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -19,6 +19,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'status_aktif' => 'boolean',
         ];
     }
 
